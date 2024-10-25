@@ -2,13 +2,14 @@ from django.db import models
 from django.contrib.auth.models import User
 
 from core.models import TimeStampedModel
+from core.validators import validate_content_
 
 
 class Post(TimeStampedModel):
     """Model representing a post."""
 
     title = models.CharField(max_length=255)
-    content = models.TextField()
+    content = models.TextField(validators=[validate_content_])
     auto_comment_answer = models.BooleanField(default=False)
     comment_answer_delay_mins = models.IntegerField(default=0)
 
