@@ -1,16 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from core.models import TimeStampedModel
 
-class Post(models.Model):
+
+class Post(TimeStampedModel):
     """Model representing a post."""
 
     title = models.CharField(max_length=255)
     content = models.TextField()
     auto_comment_answer = models.BooleanField(default=False)
     comment_answer_delay_mins = models.IntegerField(default=0)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="posts"

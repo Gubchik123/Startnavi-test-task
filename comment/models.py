@@ -2,15 +2,14 @@ from django.db import models
 from django.contrib.auth.models import User
 
 from post.models import Post
+from core.models import TimeStampedModel
 
 
-class Comment(models.Model):
+class Comment(TimeStampedModel):
     """Model representing a comment on a post."""
 
     content = models.TextField()
     is_blocked = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     parent = models.ForeignKey(
         "self",
