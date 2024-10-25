@@ -147,3 +147,5 @@ CELERY_BROKER_URL = os.getenv("CELERY_BROKER", "redis://redis/0")
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 
 CENSORED_WORDS = os.getenv("CENSORED_WORDS", "").split(",")
+
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
