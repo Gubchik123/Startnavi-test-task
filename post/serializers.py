@@ -1,5 +1,7 @@
 from rest_framework import serializers
 
+from comment.serializers import PostCommentSerializer
+
 from .models import Post
 
 
@@ -7,6 +9,14 @@ class PostSerializer(serializers.ModelSerializer):
     """Serializer for the Post model."""
 
     author = serializers.CharField(source="author.username", read_only=True)
+
+    def get_fields(self) -> dict[str, serializers.Field]:
+        """Returns fields with nested serializers for the retrieve action."""
+        fields = super().get_fields()
+        view = self.context.get("view")
+        if view and view.action == "retrieve":
+            fields["comments"] = PostCommentSerializer(many=True)
+        return fields
 
     class Meta:
         """Meta options for the PostSerializer class."""
