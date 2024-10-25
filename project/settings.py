@@ -1,5 +1,6 @@
 import os
 import sys
+import logging
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -15,20 +16,38 @@ DEBUG = os.getenv("DEBUG", "0").lower() in ["true", "t", "1"]
 DEVELOPMENT = os.getenv("DEVELOPMENT", "0").lower() in ["true", "t", "1"]
 TESTING = len(sys.argv) > 1 and sys.argv[1] == "test"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["backend", "127.0.0.1", "localhost"]
+
+CORS_ALLOWED_ORIGINS = CSRF_TRUSTED_ORIGINS = [
+    "http://127.0.0.1",
+    "http://127.0.0.1:8000",
+    "http://localhost:8080",
+    "http://backend:8000",
+]
 
 INSTALLED_APPS = [
+    # Django apps
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # Third-party apps
+    "rest_framework",
+    "rest_framework.authtoken",
+    "django_celery_beat",
+    "django_celery_results",
+    "flower",
+    "corsheaders",
+    "drf_spectacular",
+    # Local apps
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -93,3 +112,34 @@ USE_TZ = True
 STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+if TESTING:
+    logging.disable(logging.CRITICAL)
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication"
+    ],
+    "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    "PAGE_SIZE": 25,
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "API",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    # 'COMPONENT_SPLIT_REQUEST': True,
+    # 'SCHEMA_PATH_PREFIX_TRIM': True
+    "SCHEMA_PATH_PREFIX": r"/api/v\d/*",
+}
+
+CELERY_RESULT_EXTENDED = True
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 950400
+CELERY_RESULT_BACKEND = "django-db"
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+CELERY_BROKER_URL = os.getenv("CELERY_BROKER", "redis://redis/0")
+# CELERY_RESULT_BACKEND = os.getenv("CELERY_BACKEND", "redis://redis/0")
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
