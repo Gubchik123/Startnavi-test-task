@@ -1,8 +1,9 @@
 from rest_framework.viewsets import ModelViewSet
 
+from core.permissions import IsAuthorOrReadOnly
+
 from .models import Post
 from .serializers import PostSerializer
-from .permissions import IsAuthorOrReadOnly
 
 
 class PostViewSet(ModelViewSet):
