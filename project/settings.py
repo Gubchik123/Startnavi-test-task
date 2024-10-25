@@ -145,3 +145,5 @@ CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 CELERY_BROKER_URL = os.getenv("CELERY_BROKER", "redis://redis/0")
 # CELERY_RESULT_BACKEND = os.getenv("CELERY_BACKEND", "redis://redis/0")
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+
+CENSORED_WORDS = os.getenv("CENSORED_WORDS", "").split(",")
