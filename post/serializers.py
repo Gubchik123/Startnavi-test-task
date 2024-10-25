@@ -18,6 +18,11 @@ class PostSerializer(serializers.ModelSerializer):
             fields["comments"] = PostCommentSerializer(many=True)
         return fields
 
+    def create(self, validated_data):
+        """Put the author of the post as the current user."""
+        validated_data["author"] = self.context["request"].user
+        return super().create(validated_data)
+
     class Meta:
         """Meta options for the PostSerializer class."""
 
