@@ -1,4 +1,7 @@
 from rest_framework import serializers
+from django.core.exceptions import ValidationError
+
+from core.validators import validate_content_
 
 from .models import Comment
 
@@ -8,8 +11,21 @@ class CommentSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """Put the author of the comment as the current user."""
+        self._validate_and_block_content(validated_data)
         validated_data["author"] = self.context["request"].user
         return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        """Update the content of the comment."""
+        self._validate_and_block_content(validated_data)
+        return super().update(instance, validated_data)
+
+    def _validate_and_block_content(self, validated_data):
+        """Validate content and block if validation fails."""
+        try:
+            validate_content_(validated_data["content"])
+        except ValidationError:
+            validated_data["is_blocked"] = True
 
     class Meta:
         """Meta options for the CommentSerializer class."""
