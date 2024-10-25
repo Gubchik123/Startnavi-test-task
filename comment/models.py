@@ -27,7 +27,7 @@ class Comment(TimeStampedModel):
 
     def __str__(self):
         """Returns the author and post as the string representation of the Comment model"""
-        return f"{self.user} - {self.post}"
+        return f"{self.author} - {self.post}"
 
     class Meta:
         """Meta options for the Comment model."""
