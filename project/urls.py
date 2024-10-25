@@ -13,6 +13,7 @@ urlpatterns = [
     path("api/v1/", include("djoser.urls")),
     # Local apps
     path("api/v1/", include("post.router")),
+    path("api/v1/", include("comment.router")),
     # Swagger
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path(
