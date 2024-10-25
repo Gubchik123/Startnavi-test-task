@@ -1,0 +1,77 @@
+version: '3.8'
+
+networks:
+  default:
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: 1400
+
+services:
+  db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    restart: always
+    networks:
+      - default
+
+  redis:
+    image: redis:latest
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    restart: always
+    networks:
+      - default
+
+  backend:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./:/usr/src/app
+      - staticfiles:/usr/src/app/static
+    ports:
+      - "8000:8000"
+    restart: always
+    depends_on:
+      - db
+      - redis
+    networks:
+      - default
+
+  celery_worker:
+    build: .
+    command: celery -A project worker -B -l info
+    volumes:
+      - ./:/usr/src/app
+    depends_on:
+      - db
+      - redis
+    restart: always
+    networks:
+      - default
+    
+  celery_flower:
+    build: .
+    command: celery -A project flower --url_prefix=flower
+    volumes:
+      - ./:/usr/src/app
+      - staticfiles:/usr/src/app/static
+    ports:
+      - "5555:5555"
+    depends_on:
+      - db
+      - redis
+    restart: always
+    networks:
+      - default
+
+volumes:
+  postgres_data:
+  redis_data:
+  staticfiles:
