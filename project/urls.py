@@ -6,13 +6,17 @@ from drf_spectacular.views import SpectacularSwaggerView, SpectacularAPIView
 
 
 urlpatterns = [
+    # Django admin
     path("admin/", admin.site.urls),
+    # Third-party apps
     path("api/v1/", include("djoser.urls.jwt")),
     path("api/v1/", include("djoser.urls")),
+    # Local apps
+    path("api/v1/", include("post.router")),
+    # Swagger
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
-    # Optional UI:
     path(
-        "api/v1/schema/swagger/",
+        "api/schema/swagger/",
         SpectacularSwaggerView.as_view(url_name="schema"),
         name="swagger-ui",
     ),
