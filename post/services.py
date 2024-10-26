@@ -6,7 +6,7 @@ from comment.models import Comment
 def get_comments_analytics(post_id, date_from, date_to):
     """Return analytics about comments
     that were added to posts during a certain period."""
-    comments = (
+    return list(
         Comment.objects.filter(
             post_id=post_id,
             created_at__date__gte=date_from,
@@ -19,4 +19,3 @@ def get_comments_analytics(post_id, date_from, date_to):
         )
         .order_by("created_at__date")
     )
-    return list(comments)
