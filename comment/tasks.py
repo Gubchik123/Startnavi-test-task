@@ -9,7 +9,7 @@ logger = get_task_logger(__name__)
 
 
 @shared_task
-def generate_comment_answer(comment_id):
+def generate_comment_answer(comment_id: int):
     """Task to generate answer on the comment with the given id."""
     logger.info(f"{comment_id=} ({type(comment_id)})")
     comment = Comment.objects.get(pk=comment_id)

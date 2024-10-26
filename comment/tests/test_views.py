@@ -44,7 +44,7 @@ class CommentViewSetAPITestCase(
             Comment.objects.get(content="Something bad").is_blocked
         )
 
-    def _get_valid_data(self):
+    def _get_valid_data(self) -> dict:
         """Returns valid data for the comment creation."""
         post = Post.objects.create(
             title="Post title", content="Post content", author=self.user
@@ -55,6 +55,6 @@ class CommentViewSetAPITestCase(
             "author": self.user.id,
         }
 
-    def _get_invalid_data(self):
+    def _get_invalid_data(self) -> dict:
         """Returns invalid data for the comment creation."""
         return {"content": ""}

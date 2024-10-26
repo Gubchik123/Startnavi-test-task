@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.db.models import QuerySet
 from django.core.exceptions import ValidationError
 
 from core.validators import validate_content_
@@ -9,18 +10,18 @@ from .models import Comment
 class CommentSerializer(serializers.ModelSerializer):
     """Serializer for the Comment model."""
 
-    def create(self, validated_data):
+    def create(self, validated_data: dict) -> Comment:
         """Put the author of the comment as the current user."""
         self._validate_and_block_content(validated_data)
         validated_data["author"] = self.context["request"].user
         return super().create(validated_data)
 
-    def update(self, instance, validated_data):
+    def update(self, instance: Comment, validated_data: dict) -> Comment:
         """Update the content of the comment."""
         self._validate_and_block_content(validated_data)
         return super().update(instance, validated_data)
 
-    def _validate_and_block_content(self, validated_data):
+    def _validate_and_block_content(self, validated_data: dict):
         """Validate content and block if validation fails."""
         try:
             validate_content_(validated_data["content"])
@@ -37,7 +38,7 @@ class CommentSerializer(serializers.ModelSerializer):
 class _RecursiveSerializer(serializers.Serializer):
     """Serializer for recursive displaying."""
 
-    def to_representation(self, value):
+    def to_representation(self, value: Comment) -> dict:
         serializer = self.parent.parent.__class__(value, context=self.context)
         return serializer.data
 
@@ -45,7 +46,7 @@ class _RecursiveSerializer(serializers.Serializer):
 class _FilterCommentSerializer(serializers.ListSerializer):
     """Serializer for filtering comments."""
 
-    def to_representation(self, data):
+    def to_representation(self, data: QuerySet[Comment]) -> list[dict]:
         data = (
             data.filter(parent=None, is_blocked=False)
             .select_related("author")

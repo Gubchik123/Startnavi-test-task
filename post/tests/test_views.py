@@ -86,7 +86,7 @@ class PostViewSetAPITestCase(
             ],
         )
 
-    def _get_valid_data(self):
+    def _get_valid_data(self) -> dict:
         """Returns valid data for the post creation."""
         return {
             "title": "Post title",
@@ -94,6 +94,6 @@ class PostViewSetAPITestCase(
             "author": self.user.id,
         }
 
-    def _get_invalid_data(self):
+    def _get_invalid_data(self) -> dict:
         """Returns invalid data for the post creation."""
         return {"content": ""}

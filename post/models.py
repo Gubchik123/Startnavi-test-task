@@ -17,7 +17,7 @@ class Post(TimeStampedModel):
         User, on_delete=models.CASCADE, related_name="posts"
     )
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Returns the title as the string representation of the Post model."""
         return self.title
 

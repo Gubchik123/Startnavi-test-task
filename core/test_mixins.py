@@ -7,7 +7,7 @@ class ModelTestMixin:
 
     model: Model
 
-    def _test_field_class_name(self, field_name, class_name):
+    def _test_field_class_name(self, field_name: str, class_name: str):
         """Test that the the field is of the given class name."""
         self.assertEqual(
             self.model._meta.get_field(field_name).__class__.__name__,
@@ -93,10 +93,10 @@ class IsAuthorOrReadOnlyPermissionTestMixin:
         response = self.client.delete(f"{self.url}{self.obj.id}/")
         self.assertEqual(response.status_code, 403)
 
-    def _get_valid_data(self):
+    def _get_valid_data(self) -> dict:
         """Returns valid data for the object creation."""
         raise NotImplementedError
 
-    def _get_invalid_data(self):
+    def _get_invalid_data(self) -> dict:
         """Returns invalid data for the object creation."""
         raise NotImplementedError

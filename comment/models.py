@@ -25,7 +25,7 @@ class Comment(TimeStampedModel):
         User, on_delete=models.CASCADE, related_name="comments"
     )
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Returns the author and post as the string representation of the Comment model"""
         return f"{self.author} - {self.post}"
 

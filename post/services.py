@@ -1,9 +1,13 @@
+from datetime import datetime
+
 from django.db.models import Count, Q
 
 from comment.models import Comment
 
 
-def get_comments_analytics(post_id, date_from, date_to):
+def get_comments_analytics(
+    post_id: int, date_from: datetime, date_to: datetime
+) -> list[dict]:
     """Return analytics about comments
     that were added to posts during a certain period."""
     return list(

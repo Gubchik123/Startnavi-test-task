@@ -2,7 +2,7 @@ from django.conf import settings
 import google.generativeai as genai
 
 
-def get_ai_response(prompt):
+def get_ai_response(prompt: str) -> str:
     """Returns the response to the given prompt."""
     genai.configure(api_key=settings.GEMINI_API_KEY)
     model = genai.GenerativeModel("gemini-1.5-flash")
