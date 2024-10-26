@@ -13,7 +13,7 @@ from .services import get_comments_analytics
 class PostViewSet(ModelViewSet):
     """View set for the Post model."""
 
-    queryset = Post.objects.all()
+    queryset = Post.objects.select_related("author")
     serializer_class = PostSerializer
     permission_classes = [IsAuthorOrReadOnly]
 

@@ -46,7 +46,11 @@ class _FilterCommentSerializer(serializers.ListSerializer):
     """Serializer for filtering comments."""
 
     def to_representation(self, data):
-        data = data.filter(parent=None, is_blocked=False)
+        data = (
+            data.filter(parent=None, is_blocked=False)
+            .select_related("author")
+            .prefetch_related("replies")
+        )
         return super().to_representation(data)
 
 
