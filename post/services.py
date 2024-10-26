@@ -8,7 +8,7 @@ from comment.models import Comment
 def get_comments_analytics(
     post_id: int, date_from: datetime, date_to: datetime
 ) -> list[dict]:
-    """Return analytics about comments
+    """Returns analytics about comments
     that were added to posts during a certain period."""
     return list(
         Comment.objects.filter(

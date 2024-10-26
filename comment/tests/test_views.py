@@ -24,17 +24,17 @@ class CommentViewSetAPITestCase(
         )
 
     def test_list_comments(self):
-        """Test that the list endpoint is disabled."""
+        """Tests that the list endpoint is disabled."""
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 405)
 
     def test_get_comment(self):
-        """Test that the detail endpoint is disabled."""
+        """Tests that the detail endpoint is disabled."""
         response = self.client.get(f"{self.url}{self.obj.id}/")
         self.assertEqual(response.status_code, 405)
 
     def test_create_with_censored_word(self):
-        """Test the creation of the comment with a censored word."""
+        """Tests the creation of the comment with a censored word."""
         self.client.force_authenticate(user=self.user)
         data = self._get_valid_data()
         data["content"] = "Something bad"

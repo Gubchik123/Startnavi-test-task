@@ -19,7 +19,7 @@ class PostSerializer(serializers.ModelSerializer):
         return fields
 
     def create(self, validated_data: dict) -> Post:
-        """Put the author of the post as the current user."""
+        """Puts the author of the post as the current user."""
         validated_data["author"] = self.context["request"].user
         return super().create(validated_data)
 

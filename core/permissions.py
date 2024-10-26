@@ -9,7 +9,7 @@ class IsAuthorOrReadOnly(IsAuthenticatedOrReadOnly):
     def has_object_permission(
         self, request: Request, view, obj: Model
     ) -> bool:
-        """Check if the user is the author of the object."""
+        """Checks if the user is the author of the object."""
         if request.method in SAFE_METHODS:
             return True
         return obj.author == request.user

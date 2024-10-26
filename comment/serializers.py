@@ -11,18 +11,18 @@ class CommentSerializer(serializers.ModelSerializer):
     """Serializer for the Comment model."""
 
     def create(self, validated_data: dict) -> Comment:
-        """Put the author of the comment as the current user."""
+        """Puts the author of the comment as the current user."""
         self._validate_and_block_content(validated_data)
         validated_data["author"] = self.context["request"].user
         return super().create(validated_data)
 
     def update(self, instance: Comment, validated_data: dict) -> Comment:
-        """Update the content of the comment."""
+        """Updates the content of the comment."""
         self._validate_and_block_content(validated_data)
         return super().update(instance, validated_data)
 
     def _validate_and_block_content(self, validated_data: dict):
-        """Validate content and block if validation fails."""
+        """Validates content and block if validation fails."""
         try:
             validate_content_(validated_data["content"])
         except ValidationError:
@@ -39,6 +39,7 @@ class _RecursiveSerializer(serializers.Serializer):
     """Serializer for recursive displaying."""
 
     def to_representation(self, value: Comment) -> dict:
+        """Returns the serialized data."""
         serializer = self.parent.parent.__class__(value, context=self.context)
         return serializer.data
 
@@ -47,6 +48,7 @@ class _FilterCommentSerializer(serializers.ListSerializer):
     """Serializer for filtering comments."""
 
     def to_representation(self, data: QuerySet[Comment]) -> list[dict]:
+        """Filters comments that are not replies."""
         data = (
             data.filter(parent=None, is_blocked=False)
             .select_related("author")

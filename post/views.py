@@ -24,7 +24,7 @@ class PostViewSet(ModelViewSet):
     def comments_analytics(
         self, request: Request, pk: Optional[int] = None
     ) -> JsonResponse:
-        """Return analytics about comments
+        """Returns analytics about comments
         that were added to posts during a certain period."""
         date_from = parse_date(request.query_params.get("date_from", ""))
         date_to = parse_date(request.query_params.get("date_to", ""))

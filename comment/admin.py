@@ -22,5 +22,5 @@ class CommentAdmin(admin.ModelAdmin):
     list_filter = ["is_blocked", "created_at", "updated_at"]
 
     def mini_content(self, comment: Comment) -> str:
-        """Return the first 50 characters of the given comment content."""
+        """Returns the first 50 characters of the given comment content."""
         return comment.content[:50]

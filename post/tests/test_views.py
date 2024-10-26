@@ -28,19 +28,19 @@ class PostViewSetAPITestCase(
             )
 
     def test_list_posts(self):
-        """Test the list endpoint."""
+        """Tests the list endpoint."""
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 11)
 
     def test_get_post(self):
-        """Test the retrieve endpoint."""
+        """Tests the retrieve endpoint."""
         response = self.client.get(f"{self.url}{self.obj.id}/")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["title"], self.obj.title)
 
     def test_create_with_censored_word(self):
-        """Test the creation of the post with a censored word."""
+        """Tests the creation of the post with a censored word."""
         self.client.force_authenticate(user=self.user)
         data = self._get_valid_data()
         data["content"] = "Something bad"
@@ -48,7 +48,7 @@ class PostViewSetAPITestCase(
         self.assertEqual(response.status_code, 400)
 
     def test_comments_analytics_with_invalid_dates(self):
-        """Test the comments_analytics action with invalid dates."""
+        """Tests the comments_analytics action with invalid dates."""
         response = self.client.get(
             f"{self.url}{self.obj.id}/comments_analytics/",
             {"date_from": "string", "date_to": "string"},
@@ -57,7 +57,7 @@ class PostViewSetAPITestCase(
         self.assertEqual(response.json()["error"], "Invalid date range")
 
     def test_comments_analytics(self):
-        """Test the comments_analytics action."""
+        """Tests the comments_analytics action."""
         for _ in range(10):
             Comment.objects.create(
                 post=self.obj, content="Comment content", author=self.user
