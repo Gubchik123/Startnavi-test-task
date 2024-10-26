@@ -147,3 +147,30 @@ CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 CENSORED_WORDS = os.getenv("CENSORED_WORDS", "").split(",")
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+if DEBUG and DEVELOPMENT and not TESTING:
+    import mimetypes
+
+    mimetypes.add_type("application/javascript", ".js", True)
+
+    INSTALLED_APPS.insert(13, "debug_toolbar")
+
+    MIDDLEWARE.insert(1, "debug_toolbar.middleware.DebugToolbarMiddleware")
+    MIDDLEWARE.insert(2, "core.middlewares.NonHtmlDebugToolbarMiddleware")
+
+    del REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"]
+
+    INTERNAL_IPS = ALLOWED_HOSTS
+
+    DEBUG_TOOLBAR_CONFIG = {
+        "SHOW_TOOLBAR_CALLBACK": lambda request: True,
+    }
+    DEBUG_TOOLBAR_PANELS = (
+        "debug_toolbar.panels.timer.TimerPanel",
+        "debug_toolbar.panels.headers.HeadersPanel",
+        "debug_toolbar.panels.sql.SQLPanel",
+        "debug_toolbar.panels.staticfiles.StaticFilesPanel",
+        "debug_toolbar.panels.templates.TemplatesPanel",
+        "debug_toolbar.panels.cache.CachePanel",
+        "debug_toolbar.panels.signals.SignalsPanel",
+    )

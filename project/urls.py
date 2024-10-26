@@ -22,3 +22,6 @@ urlpatterns = [
         name="swagger-ui",
     ),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+if settings.DEBUG and settings.DEVELOPMENT and not settings.TESTING:
+    urlpatterns += [path("__debug__/", include("debug_toolbar.urls"))]
