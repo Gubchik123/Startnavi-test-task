@@ -11,7 +11,7 @@ class Post(TimeStampedModel):
     title = models.CharField(max_length=255)
     content = models.TextField(validators=[validate_content_])
     auto_comment_answer = models.BooleanField(default=False)
-    comment_answer_delay_mins = models.IntegerField(default=0)
+    comment_answer_delay_mins = models.PositiveIntegerField(default=0)
 
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="posts"
